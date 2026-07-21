@@ -1,4 +1,4 @@
-query RunInput {
+query CartInput {
   cart {
     lines {
       id
@@ -12,18 +12,17 @@ query RunInput {
           price { amount }
           product {
             id
-            inTargetCollections: inAnyCollection(ids: $collectionIds)
-            inExcludedCollections: inAnyCollection(ids: $excludedCollectionIds)
+            collections(first: 250) { nodes { id } }
           }
         }
       }
     }
     buyerIdentity {
       isLoggedIn
-      customer { hasAnyTag(tags: $customerTags) }
     }
   }
   discount {
+    discountClasses
     metafield(namespace: "$app:campaign", key: "config") {
       value
     }

@@ -1,30 +1,29 @@
-api_version = "2026-01"
+# Matches the structure Shopify's own CLI scaffold generates for a "Discount"
+# function extension on the 2026-04 API (verified against a real `shopify app
+# generate extension` run — this file was hand-guessed before and is now
+# corrected to match). The `uid` below is a placeholder; the Shopify CLI will
+# assign/keep a real one on the first successful `shopify app dev` run, or
+# you can copy the uid it generates for you from your own scaffold.
+
+api_version = "2026-04"
 
 [[extensions]]
-name = "pricekeeper-discount-function"
+name = "t:name"
 handle = "pricekeeper-discount-function"
 type = "function"
+uid = "b6f2a9d1-3c47-4e21-9a55-8b1f6d2c4e70"
+description = "t:description"
 
   [[extensions.targeting]]
   target = "cart.lines.discounts.generate.run"
   input_query = "src/cart_lines_discounts_generate_run.graphql"
-  export = "run"
-
-    # TODO-verify against a real Shopify backend (see HANDOVER.md section 6,
-    # item 1): confirm this is the exact TOML nesting the CLI expects for the
-    # input-query variables block on the 2026-01 unified Discount Function API.
-    [extensions.targeting.input.variables]
-    single_json_metafield = { namespace = "$app:campaign", key = "config" }
+  export = "cart-lines-discounts-generate-run"
 
   [[extensions.targeting]]
   target = "cart.delivery-options.discounts.generate.run"
   input_query = "src/cart_delivery_options_discounts_generate_run.graphql"
-  export = "run"
+  export = "cart-delivery-options-discounts-generate-run"
 
-    [extensions.targeting.input.variables]
-    single_json_metafield = { namespace = "$app:campaign", key = "config" }
-
-[extensions.build]
-command = ""
-path = "dist/function.wasm"
-watch = ["src/**/*.ts"]
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"

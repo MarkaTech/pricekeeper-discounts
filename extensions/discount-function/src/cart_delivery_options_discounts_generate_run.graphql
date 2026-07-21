@@ -1,15 +1,17 @@
-query RunInput {
+query DeliveryInput {
   cart {
     cost {
       subtotalAmount { amount currencyCode }
     }
     deliveryGroups {
+      id
       deliveryOptions {
         handle
       }
     }
   }
   discount {
+    discountClasses
     metafield(namespace: "$app:campaign", key: "config") {
       value
     }
