@@ -1,0 +1,5 @@
+name = "pricekeeper-widgets"
+type = "theme"
+
+[[extensions]]
+  # theme app extension — display only, reads $app metafields, never writes.

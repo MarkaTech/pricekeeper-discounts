@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+build/
+.cache/
+prisma/dev.sqlite
+*.log
+.DS_Store
+.shopify/
+extensions/discount-function/node_modules/

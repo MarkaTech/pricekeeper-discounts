@@ -1,0 +1,14 @@
+{%- comment -%}
+  App embed (cart pages only). Reads the shop's free-shipping campaign
+  threshold and the live cart subtotal via /cart.js — the only external
+  network request the storefront widgets make anywhere.
+{%- endcomment -%}
+<div id="pk-shipping-bar" class="pk-shipping-bar" data-pk-threshold="{{ shop.metafields.pricekeeper.active_campaigns.value | first_free_shipping_threshold }}"></div>
+
+{% schema %}
+{
+  "name": "PriceKeeper: Shipping bar",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}

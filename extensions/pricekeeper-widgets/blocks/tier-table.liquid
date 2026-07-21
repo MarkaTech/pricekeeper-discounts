@@ -1,0 +1,10 @@
+{%- render 'pk-match' -%}
+{%- if pk_matched_campaign and pk_matched_campaign.type == "VOLUME" -%}
+  <table class="pk-tier-table" data-pk-campaign="{{ pk_matched_campaign.id }}">
+    <tbody data-pk-tiers></tbody>
+  </table>
+{%- endif -%}
+
+{% schema %}
+{ "name": "PriceKeeper: Tier table", "target": "section", "settings": [] }
+{% endschema %}

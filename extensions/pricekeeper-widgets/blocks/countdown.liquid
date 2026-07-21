@@ -1,0 +1,8 @@
+{%- render 'pk-match' -%}
+{%- if pk_matched_campaign and pk_matched_campaign.endsAt -%}
+  <div class="pk-countdown" data-pk-ends-at="{{ pk_matched_campaign.endsAt }}"></div>
+{%- endif -%}
+
+{% schema %}
+{ "name": "PriceKeeper: Countdown", "target": "section", "settings": [] }
+{% endschema %}

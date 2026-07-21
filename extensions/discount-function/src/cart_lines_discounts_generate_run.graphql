@@ -1,0 +1,31 @@
+query RunInput {
+  cart {
+    lines {
+      id
+      quantity
+      cost {
+        totalAmount { amount currencyCode }
+      }
+      merchandise {
+        ... on ProductVariant {
+          id
+          price { amount }
+          product {
+            id
+            inTargetCollections: inAnyCollection(ids: $collectionIds)
+            inExcludedCollections: inAnyCollection(ids: $excludedCollectionIds)
+          }
+        }
+      }
+    }
+    buyerIdentity {
+      isLoggedIn
+      customer { hasAnyTag(tags: $customerTags) }
+    }
+  }
+  discount {
+    metafield(namespace: "$app:campaign", key: "config") {
+      value
+    }
+  }
+}

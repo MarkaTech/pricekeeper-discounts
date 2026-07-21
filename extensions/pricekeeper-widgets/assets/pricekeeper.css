@@ -1,0 +1,27 @@
+.pk-price-badge { display: flex; align-items: baseline; gap: 0.5em; margin: 0.5em 0; }
+.pk-price-was { text-decoration: line-through; opacity: 0.6; }
+.pk-price-now { font-weight: 600; }
+.pk-savings { font-size: 0.85em; color: var(--pk-accent, #111); }
+
+.pk-tier-table { width: 100%; border-collapse: collapse; margin: 0.75em 0; font-size: 0.9em; }
+.pk-tier-table td, .pk-tier-table th { padding: 0.4em 0.6em; border: 1px solid rgba(0,0,0,0.08); }
+
+.pk-bogo-badge {
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  border-radius: 0.4em;
+  background: var(--pk-accent, #111);
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.pk-countdown { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.pk-shipping-bar {
+  padding: 0.6em 1em;
+  text-align: center;
+  background: var(--pk-accent, #111);
+  color: #fff;
+  font-size: 0.9em;
+}

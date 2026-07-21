@@ -1,0 +1,7 @@
+{
+  "pricekeeper": {
+    "bogo_badge_label": "Buy more, get one free",
+    "shipping_bar_progress": "Add {{ amount }} more for free shipping",
+    "shipping_bar_unlocked": "You've unlocked free shipping!"
+  }
+}

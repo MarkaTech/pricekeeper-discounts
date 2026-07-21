@@ -1,0 +1,16 @@
+{%- render 'pk-match' -%}
+{%- if pk_matched_campaign -%}
+  <div class="pk-price-badge" data-pk-campaign="{{ pk_matched_campaign.id }}">
+    <span class="pk-price-was">{{ product.price | money }}</span>
+    <span class="pk-price-now" data-pk-price-now></span>
+    <span class="pk-savings" data-pk-savings></span>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "PriceKeeper: Price badge",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

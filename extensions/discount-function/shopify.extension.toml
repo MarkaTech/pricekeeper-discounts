@@ -1,0 +1,30 @@
+api_version = "2026-01"
+
+[[extensions]]
+name = "pricekeeper-discount-function"
+handle = "pricekeeper-discount-function"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.lines.discounts.generate.run"
+  input_query = "src/cart_lines_discounts_generate_run.graphql"
+  export = "run"
+
+    # TODO-verify against a real Shopify backend (see HANDOVER.md section 6,
+    # item 1): confirm this is the exact TOML nesting the CLI expects for the
+    # input-query variables block on the 2026-01 unified Discount Function API.
+    [extensions.targeting.input.variables]
+    single_json_metafield = { namespace = "$app:campaign", key = "config" }
+
+  [[extensions.targeting]]
+  target = "cart.delivery-options.discounts.generate.run"
+  input_query = "src/cart_delivery_options_discounts_generate_run.graphql"
+  export = "run"
+
+    [extensions.targeting.input.variables]
+    single_json_metafield = { namespace = "$app:campaign", key = "config" }
+
+[extensions.build]
+command = ""
+path = "dist/function.wasm"
+watch = ["src/**/*.ts"]

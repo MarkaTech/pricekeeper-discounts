@@ -1,0 +1,10 @@
+{%- render 'pk-match' -%}
+{%- if pk_matched_campaign and pk_matched_campaign.type == "BOGO" -%}
+  <div class="pk-bogo-badge" data-pk-campaign="{{ pk_matched_campaign.id }}">
+    {{ 'pricekeeper.bogo_badge_label' | t }}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{ "name": "PriceKeeper: BOGO badge", "target": "section", "settings": [] }
+{% endschema %}

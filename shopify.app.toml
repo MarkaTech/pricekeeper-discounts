@@ -1,0 +1,61 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "PriceKeeper Discounts"
+client_id = "REPLACE_WITH_YOUR_CLIENT_ID"
+application_url = "https://REPLACE_WITH_YOUR_APP_URL"
+embedded = true
+
+[access_scopes]
+# Minimal scopes only — each justified below.
+# read_products: product/collection pickers, live preview
+# read_orders: order-level discount attribution for analytics
+# write_discounts, read_discounts: create/update/delete the app's own
+#   automatic discounts; read existing discounts for the conflict checker
+scopes = "read_products,read_orders,write_discounts,read_discounts"
+
+[auth]
+redirect_urls = [
+  "https://REPLACE_WITH_YOUR_APP_URL/auth/callback",
+  "https://REPLACE_WITH_YOUR_APP_URL/auth/shopify/callback",
+  "https://REPLACE_WITH_YOUR_APP_URL/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2026-01"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/scopes_update"]
+  uri = "/webhooks/app/scopes_update"
+
+  # Mandatory GDPR trio
+  [[webhooks.subscriptions]]
+  topics = ["customers/data_request"]
+  uri = "/webhooks/customers/data_request"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/redact"]
+  uri = "/webhooks/customers/redact"
+
+  [[webhooks.subscriptions]]
+  topics = ["shop/redact"]
+  uri = "/webhooks/shop/redact"
+
+  # Store-state / billing lifecycle
+  [[webhooks.subscriptions]]
+  topics = ["shop/update"]
+  uri = "/webhooks/shop/update"
+
+  [[webhooks.subscriptions]]
+  topics = ["app_subscriptions/update"]
+  uri = "/webhooks/app_subscriptions/update"
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "REPLACE_WITH_YOUR_DEV_STORE.myshopify.com"
+
+[pos]
+embedded = false
