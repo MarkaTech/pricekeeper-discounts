@@ -1,5 +1,28 @@
-{%- render 'pk-match' -%}
-{%- if pk_matched_campaign -%}
+{%- comment -%}
+  Matching logic is inlined here (rather than via {% render %}) because
+  render creates an isolated variable scope in Liquid — a variable assigned
+  inside a rendered snippet is not visible to the block that rendered it.
+  Display-only: this never determines what the customer actually pays.
+  Checkout (the Shopify Function) is always the pricing authority.
+{%- endcomment -%}
+{%- assign pk_campaigns = shop.metafields.pricekeeper.active_campaigns.value -%}
+{%- assign pk_matched_campaign = blank -%}
+{%- if pk_campaigns -%}
+  {%- for campaign in pk_campaigns -%}
+    {%- assign pk_in_collection = false -%}
+    {%- for collection in product.collections -%}
+      {%- if campaign.collectionIds contains collection.id -%}
+        {%- assign pk_in_collection = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if campaign.productIds contains product.id or pk_in_collection -%}
+      {%- assign pk_matched_campaign = campaign -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if pk_matched_campaign != blank -%}
   <div class="pk-price-badge" data-pk-campaign="{{ pk_matched_campaign.id }}">
     <span class="pk-price-was">{{ product.price | money }}</span>
     <span class="pk-price-now" data-pk-price-now></span>

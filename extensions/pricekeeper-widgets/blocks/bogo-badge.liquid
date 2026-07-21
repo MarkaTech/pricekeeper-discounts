@@ -1,5 +1,22 @@
-{%- render 'pk-match' -%}
-{%- if pk_matched_campaign and pk_matched_campaign.type == "BOGO" -%}
+{%- comment -%} Matching logic inlined — see price-badge.liquid for why. {%- endcomment -%}
+{%- assign pk_campaigns = shop.metafields.pricekeeper.active_campaigns.value -%}
+{%- assign pk_matched_campaign = blank -%}
+{%- if pk_campaigns -%}
+  {%- for campaign in pk_campaigns -%}
+    {%- assign pk_in_collection = false -%}
+    {%- for collection in product.collections -%}
+      {%- if campaign.collectionIds contains collection.id -%}
+        {%- assign pk_in_collection = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if campaign.productIds contains product.id or pk_in_collection -%}
+      {%- assign pk_matched_campaign = campaign -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if pk_matched_campaign != blank and pk_matched_campaign.type == "BOGO" -%}
   <div class="pk-bogo-badge" data-pk-campaign="{{ pk_matched_campaign.id }}">
     {{ 'pricekeeper.bogo_badge_label' | t }}
   </div>

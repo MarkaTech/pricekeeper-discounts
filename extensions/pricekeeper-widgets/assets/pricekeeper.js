@@ -34,7 +34,20 @@
   function initShippingBar() {
     var bar = document.getElementById("pk-shipping-bar");
     if (!bar) return;
-    var threshold = Number(bar.getAttribute("data-pk-threshold") || 0);
+
+    var campaigns = [];
+    try {
+      campaigns = JSON.parse(bar.getAttribute("data-pk-campaigns") || "[]") || [];
+    } catch (e) {
+      return; // malformed metafield — fail silently, display-only widget
+    }
+
+    var shippingCampaign = campaigns.filter(function (c) {
+      return c.type === "FREE_SHIPPING";
+    })[0];
+    if (!shippingCampaign) return;
+
+    var threshold = Number(shippingCampaign.minSubtotal || 0) * 100; // to cents
     if (!threshold) return;
 
     fetch("/cart.js")
