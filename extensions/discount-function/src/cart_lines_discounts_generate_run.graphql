@@ -5,20 +5,21 @@ query CartInput {
       quantity
       cost {
         totalAmount { amount currencyCode }
+        amountPerQuantity { amount currencyCode }
       }
       merchandise {
         ... on ProductVariant {
           id
-          price { amount }
           product {
             id
-            collections(first: 250) { nodes { id } }
           }
         }
       }
     }
     buyerIdentity {
-      isLoggedIn
+      customer {
+        id
+      }
     }
   }
   discount {

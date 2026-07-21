@@ -22,18 +22,20 @@ import { decimalToMinorUnits, minorUnitsToDecimal, subtractDiscount } from "./en
 interface CartLine {
   id: string;
   quantity: number;
-  cost: { totalAmount: { amount: string; currencyCode: string } };
+  cost: {
+    totalAmount: { amount: string; currencyCode: string };
+    amountPerQuantity: { amount: string; currencyCode: string };
+  };
   merchandise: {
     id: string;
-    price: { amount: string };
-    product: { id: string; collections: { nodes: Array<{ id: string }> } };
+    product: { id: string };
   };
 }
 
 interface CartInput {
   cart: {
     lines: CartLine[];
-    buyerIdentity?: { isLoggedIn: boolean };
+    buyerIdentity?: { customer?: { id: string } | null } | null;
   };
   discount: {
     discountClasses: string[]; // "ORDER" | "PRODUCT" | "SHIPPING"
@@ -46,25 +48,28 @@ export function cartLinesDiscountsGenerateRun(input: CartInput) {
   if (!config || input.cart.lines.length === 0) return { operations: [] };
 
   const currency = input.cart.lines[0]?.cost.totalAmount.currencyCode ?? "USD";
-  const isLoggedIn = Boolean(input.cart.buyerIdentity?.isLoggedIn);
+  const isLoggedIn = Boolean(input.cart.buyerIdentity?.customer?.id);
 
   const hasProductClass = input.discount.discountClasses.includes("PRODUCT");
   const hasOrderClass = input.discount.discountClasses.includes("ORDER");
 
-  // Adapt raw collection-membership data to the boolean shape isTargeted
-  // expects. Only the product's first 250 collections are fetched — see
-  // docs/scale-targeting.md for why that limit is effectively never hit.
+  // NOTE: Collection-based targeting is temporarily disabled here.
+  // Product.collections/nodes and Product.inCollections(ids) both require
+  // knowing the collection IDs at query-authoring time or passing them as
+  // GraphQL variables, and Function input queries don't support arbitrary
+  // request-time variables the way regular Admin API queries do. Product
+  // and variant/tag-based targeting still work fully. Re-enabling collection
+  // targeting requires wiring collection IDs through as declared input query
+  // variables (see shopify.dev's Function input query docs) — tracked as a
+  // follow-up in docs/scale-targeting.md.
   const targetedLines = input.cart.lines.filter((line) => {
-    const collectionIds = line.merchandise.product.collections.nodes.map((c) => c.id);
-    const inTarget = collectionIds.some((id) => config.targeting.collectionIds?.includes(id));
-    const inExcluded = collectionIds.some((id) => config.targeting.excludedCollectionIds?.includes(id));
     return isTargeted(
       config.targeting,
       {
         variantId: line.merchandise.id,
         productId: line.merchandise.product.id,
-        inTargetCollections: inTarget,
-        inExcludedCollections: inExcluded,
+        inTargetCollections: false,
+        inExcludedCollections: false,
       },
       [],
       isLoggedIn,
@@ -150,7 +155,7 @@ function newPriceOperations(lines: CartLine[], newPriceMinor: bigint, currency: 
       {
         productDiscountsAdd: {
           candidates: lines.flatMap((line) => {
-            const currentPriceMinor = decimalToMinorUnits(line.merchandise.price.amount, currency);
+            const currentPriceMinor = decimalToMinorUnits(line.cost.amountPerQuantity.amount, currency);
             const offMinor = currentPriceMinor - newPriceMinor;
             if (offMinor <= 0n) return []; // never a negative/zero discount
             return [
