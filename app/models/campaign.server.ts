@@ -49,9 +49,18 @@ export async function createCampaign(shopId: string, data: {
 }
 
 export async function updateCampaignStatus(id: string, status: string, discountId?: string | null) {
+  // Distinguish three cases:
+  //  - discountId is a string  -> set it (just activated, got a fresh node)
+  //  - discountId is null       -> CLEAR it (just deactivated; the Shopify
+  //                                discount was deleted, so the stored ID is
+  //                                now stale and must not be reused)
+  //  - discountId is undefined  -> leave the column untouched
+  // The previous `discountId ?? undefined` collapsed null into undefined, so
+  // deactivation silently kept a dead ID and re-activation then failed with
+  // "Discount does not exist."
   return prisma.campaign.update({
     where: { id },
-    data: { status, discountId: discountId ?? undefined },
+    data: discountId === undefined ? { status } : { status, discountId },
   });
 }
 

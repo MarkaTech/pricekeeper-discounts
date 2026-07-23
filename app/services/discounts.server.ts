@@ -168,14 +168,30 @@ export async function activateCampaign(
     ],
   };
 
-  const response = campaign.discountId
-    ? await admin.graphql(DISCOUNT_UPDATE_MUTATION, { variables: { id: campaign.discountId, automaticAppDiscount: input } })
-    : await admin.graphql(DISCOUNT_CREATE_MUTATION, { variables: { automaticAppDiscount: input } });
+  // Try to reuse the existing discount node if we have one, but self-heal if
+  // that node no longer exists on Shopify's side (e.g. it was deleted on a
+  // previous deactivate and the stale ID lingered on the campaign, or a
+  // merchant deleted it manually in Shopify's own Discounts admin). In that
+  // case we fall back to creating a fresh discount instead of failing with
+  // "Discount does not exist."
+  const runUpdate = async (id: string) => {
+    const res = await admin.graphql(DISCOUNT_UPDATE_MUTATION, { variables: { id, automaticAppDiscount: input } });
+    return (await res.json()).data.discountAutomaticAppUpdate;
+  };
+  const runCreate = async () => {
+    const res = await admin.graphql(DISCOUNT_CREATE_MUTATION, { variables: { automaticAppDiscount: input } });
+    return (await res.json()).data.discountAutomaticAppCreate;
+  };
 
-  const data = await response.json();
-  const result = campaign.discountId
-    ? data.data.discountAutomaticAppUpdate
-    : data.data.discountAutomaticAppCreate;
+  let result = campaign.discountId ? await runUpdate(campaign.discountId) : await runCreate();
+
+  const missingDiscount = (r: any) =>
+    r?.userErrors?.some((e: any) => /does not exist|couldn'?t find|not found/i.test(e.message ?? ""));
+
+  if (campaign.discountId && missingDiscount(result)) {
+    // Stale reference — create a brand-new discount node instead.
+    result = await runCreate();
+  }
 
   if (result.userErrors?.length) {
     throw new Error(result.userErrors.map((e: any) => e.message).join("; "));
