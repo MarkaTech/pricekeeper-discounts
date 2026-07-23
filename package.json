@@ -1,6 +1,7 @@
 {
   "name": "pricekeeper-discounts",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "remix vite:build",
     "vite:dev": "remix vite:dev",
