@@ -109,6 +109,19 @@ export const CONFLICT_SCAN_QUERY = `#graphql
   }
 `;
 
+function discountClassesFor(type: string): string[] {
+  switch (type) {
+    case "FREE_SHIPPING":
+      return ["SHIPPING"];
+    case "CART_TOTAL":
+      return ["ORDER"];
+    // PERCENTAGE, FIXED_AMOUNT, NEW_PRICE, VOLUME, BOGO all discount specific
+    // line items/products rather than the order or shipping as a whole.
+    default:
+      return ["PRODUCT"];
+  }
+}
+
 export async function activateCampaign(
   admin: AdminApiContext,
   campaign: { id: string; name: string; type: string; configJson: string; startsAt: Date | null; endsAt: Date | null; discountId: string | null },
@@ -125,8 +138,15 @@ export async function activateCampaign(
   const input = {
     title: campaign.name,
     functionId,
-    startsAt: campaign.startsAt?.toISOString(),
+    // Shopify rejects a blank startsAt outright ("Starts at can't be
+    // blank"), so a campaign left with no explicit start defaults to "now".
+    startsAt: (campaign.startsAt ?? new Date()).toISOString(),
     endsAt: campaign.endsAt?.toISOString() ?? null,
+    // Required by the 2026-04 unified Discount Function API: any function
+    // targeting cart.lines/delivery-options discounts.generate.run must
+    // declare which discount classes it can produce, matching the
+    // operations it's actually allowed to emit for this campaign type.
+    discountClasses: discountClassesFor(campaign.type),
     combinesWith: {
       orderDiscounts: Boolean(config.combinesWith?.order),
       productDiscounts: Boolean(config.combinesWith?.product),
