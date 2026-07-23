@@ -7,7 +7,42 @@
 import type { AdminApiContext } from "@shopify/shopify-app-remix/server";
 import { canActivateCampaign, updateCampaignStatus } from "../models/campaign.server";
 
-const FUNCTION_ID = process.env.DISCOUNT_FUNCTION_ID || "REPLACE_WITH_FUNCTION_ID";
+// The discount function's ID isn't a fixed value we can hardcode — Shopify
+// assigns it per app installation. Rather than requiring a manually-set
+// DISCOUNT_FUNCTION_ID env var (easy to forget, silently wrong), we look it
+// up at runtime from the shop's own installed functions and cache it.
+const SHOPIFY_FUNCTIONS_QUERY = `#graphql
+  query DiscountifyFunctions {
+    shopifyFunctions(first: 25) {
+      nodes { id apiType title }
+    }
+  }
+`;
+
+let cachedFunctionId: string | null = null;
+
+export async function getDiscountFunctionId(admin: AdminApiContext): Promise<string> {
+  if (cachedFunctionId) return cachedFunctionId;
+
+  const response = await admin.graphql(SHOPIFY_FUNCTIONS_QUERY);
+  const data = await response.json();
+  const nodes = data.data?.shopifyFunctions?.nodes ?? [];
+
+  const match = nodes.find(
+    (n: { apiType: string; title: string }) =>
+      n.apiType === "discount" && n.title === "Discountify Discount Engine",
+  );
+
+  if (!match) {
+    throw new Error(
+      "Could not find the Discountify discount function on this shop. Make sure `shopify app deploy` " +
+        "(or `shopify app dev`) has run at least once so the function extension is registered.",
+    );
+  }
+
+  cachedFunctionId = match.id;
+  return match.id;
+}
 
 interface InputVars {
   collectionIds?: string[];
@@ -85,10 +120,11 @@ export async function activateCampaign(
     throw new Error("Active campaign limit reached for this plan. Upgrade or pause another campaign first.");
   }
 
+  const functionId = await getDiscountFunctionId(admin);
   const config = JSON.parse(campaign.configJson);
   const input = {
     title: campaign.name,
-    functionId: FUNCTION_ID,
+    functionId,
     startsAt: campaign.startsAt?.toISOString(),
     endsAt: campaign.endsAt?.toISOString() ?? null,
     combinesWith: {

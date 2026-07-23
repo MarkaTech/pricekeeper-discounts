@@ -1,0 +1,4 @@
+{
+  "name": "Discountify Discount Engine",
+  "description": "Computes all Discountify campaign discounts (percentage, fixed amount, volume, BOGO, cart-total, free shipping) at checkout via a native Shopify Function, without ever editing product or variant prices."
+}
