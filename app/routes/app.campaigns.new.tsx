@@ -31,7 +31,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     recurrence: input.recurrence,
   });
 
-  return redirect(`/app/campaigns/${campaign.id}`);
+  // NOTE: no campaign detail page exists yet (tracked as a follow-up), so we
+  // redirect back to the campaigns list rather than a per-campaign route.
+  return redirect(`/app/campaigns?created=${campaign.id}`);
 };
 
 export default function NewCampaign() {
