@@ -1,0 +1,4 @@
+roles = ["backend", "frontend"]
+
+[commands]
+dev = "npm run vite:dev"
