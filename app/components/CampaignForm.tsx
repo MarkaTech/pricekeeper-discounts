@@ -2,7 +2,7 @@
 // (tiers for VOLUME, buy/get pickers for BOGO, etc.) plus the fields common
 // to every campaign: name, targeting, schedule, recurrence, combinesWith.
 import { useState } from "react";
-import { FormLayout, TextField, Select, Checkbox } from "@shopify/polaris";
+import { FormLayout, TextField, Select, Checkbox, Button, InlineStack } from "@shopify/polaris";
 
 const RECURRENCE_OPTIONS = [
   { label: "Does not repeat", value: "NONE" },
@@ -15,6 +15,9 @@ export default function CampaignForm({ campaignTypes }: { campaignTypes: string[
   const [type, setType] = useState(campaignTypes[0]);
   const [name, setName] = useState("");
   const [configState, setConfigState] = useState<Record<string, unknown>>({});
+  const [startsAt, setStartsAt] = useState("");
+  const [endsAt, setEndsAt] = useState("");
+  const [recurrence, setRecurrence] = useState("NONE");
 
   return (
     <FormLayout>
@@ -30,13 +33,39 @@ export default function CampaignForm({ campaignTypes }: { campaignTypes: string[
       <TypeSpecificFields type={type} config={configState} onChange={setConfigState} />
 
       <FormLayout.Group>
-        <TextField label="Starts at" name="startsAt" type="datetime-local" autoComplete="off" onChange={() => {}} value="" />
-        <TextField label="Ends at (optional)" name="endsAt" type="datetime-local" autoComplete="off" onChange={() => {}} value="" />
+        <TextField
+          label="Starts at"
+          name="startsAt"
+          type="datetime-local"
+          autoComplete="off"
+          onChange={setStartsAt}
+          value={startsAt}
+        />
+        <TextField
+          label="Ends at (optional)"
+          name="endsAt"
+          type="datetime-local"
+          autoComplete="off"
+          onChange={setEndsAt}
+          value={endsAt}
+        />
       </FormLayout.Group>
 
-      <Select label="Recurrence" name="recurrence" options={RECURRENCE_OPTIONS} value="NONE" onChange={() => {}} />
+      <Select
+        label="Recurrence"
+        name="recurrence"
+        options={RECURRENCE_OPTIONS}
+        value={recurrence}
+        onChange={setRecurrence}
+      />
 
       <input type="hidden" name="config" value={JSON.stringify(configState)} />
+
+      <InlineStack align="end">
+        <Button submit variant="primary">
+          Save campaign
+        </Button>
+      </InlineStack>
     </FormLayout>
   );
 }
