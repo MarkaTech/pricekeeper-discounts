@@ -24,16 +24,19 @@ mode, Dawn theme for storefront shots.
 
 ## The shots
 
+> Revised 2026-07-25 to match the UI that actually exists. The old plan's "live
+> preview sandbox" and "conflict checker" shots referenced screens that were never
+> built (services exist, no UI) — Shopify verifies screenshots are genuine.
+
 1. **Campaign list (hero)** — 5 ACTIVE + 1 DRAFT campaigns visible. Caption: "Every
    discount type in one place — and none of them ever edit your product prices."
-2. **Campaign builder** — a volume-tier campaign mid-edit, targeting a collection.
-   Caption: "Quantity breaks in minutes: tiers, collection targeting, and exclusions
-   — no tagging, no syncing."
-3. **Live preview sandbox** — was/now pricing on a real product. Caption: "Preview runs
-   the exact engine checkout uses — see the real math before you go live."
-4. **Conflict checker** — one native code discount created alongside an app campaign
-   so the table shows both a "stacks" and "better deal wins" verdict. Caption: "Know
-   before you activate: every discount on your store, and whether it stacks."
+2. **Campaign builder** — a volume-tier campaign mid-edit: tier rows + product picker
+   open. Caption: "Quantity breaks in minutes: tiers, real product pickers, and
+   exclusions — no tagging, no syncing."
+3. **Campaign detail** — an ACTIVE campaign with Edit/Pause/Delete visible. Caption:
+   "Full control after launch: edit live campaigns, pause instantly, delete cleanly."
+4. **Billing** — the three plan cards, Growth marked current (test mode banner
+   cropped out). Caption: "Start free. Upgrade when you need more live campaigns."
 5. **Storefront product page** — price badge + tier table live on a product. Caption:
    "Customers see the deal on the product page — display-only widgets, zero layout
    shift."

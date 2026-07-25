@@ -1,0 +1,61 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101828"/>
+      <stop offset="1" stop-color="#251B54"/>
+    </linearGradient>
+    <linearGradient id="tag2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C5CFF"/>
+      <stop offset="1" stop-color="#5B3DF5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1300" cy="450" r="460" fill="#5B3DF5" opacity="0.10"/>
+
+  <!-- small tag mark top-left -->
+  <g transform="translate(104 84) scale(0.10) rotate(-38 600 600)">
+    <path d="M 700 380 L 405 380 Q 355 380 355 430 L 355 770 Q 355 820 405 820 L 700 820 Q 722 820 737 805 L 905 637 Q 926 616 926 600 Q 926 584 905 563 L 737 395 Q 722 380 700 380 Z" fill="url(#tag2)"/>
+    <circle cx="790" cy="600" r="42" fill="#101828"/>
+  </g>
+
+  <!-- Headline -->
+  <text x="104" y="290" font-family="DejaVu Sans" font-weight="bold" font-size="60" fill="#FFFFFF">Discounts at checkout.</text>
+  <text x="104" y="372" font-family="DejaVu Sans" font-weight="bold" font-size="60" fill="#9F8BFF">Catalog untouched.</text>
+  <text x="104" y="460" font-family="DejaVu Sans" font-size="29" fill="#CBD5E1">Volume, BOGO, cart-total and free-shipping offers,</text>
+  <text x="104" y="504" font-family="DejaVu Sans" font-size="29" fill="#CBD5E1">computed by a native Shopify Function. Product prices</text>
+  <text x="104" y="548" font-family="DejaVu Sans" font-size="29" fill="#CBD5E1">are never edited — nothing breaks on uninstall.</text>
+
+  <!-- pill -->
+  <rect x="104" y="618" rx="34" width="520" height="68" fill="#17C77A"/>
+  <text x="364" y="663" font-family="DejaVu Sans" font-weight="bold" font-size="30" fill="#06281A" text-anchor="middle">Accurate checkout pricing</text>
+
+  <!-- product card: catalog price intact -->
+  <g transform="translate(1030 120)">
+    <rect width="280" height="330" rx="24" fill="#FFFFFF"/>
+    <rect x="22" y="22" width="236" height="160" rx="16" fill="#E9E4FF"/>
+    <circle cx="140" cy="102" r="50" fill="#7C5CFF" opacity="0.5"/>
+    <rect x="22" y="206" width="150" height="20" rx="10" fill="#D0D5DD"/>
+    <text x="22" y="288" font-family="DejaVu Sans" font-weight="bold" font-size="40" fill="#101828">$40.00</text>
+    <rect x="22" y="304" width="108" height="6" rx="3" fill="#17C77A"/>
+    <text x="140" y="368" font-family="DejaVu Sans" font-size="24" fill="#98A2B3" text-anchor="middle">Product page — intact</text>
+  </g>
+
+  <!-- arrow -->
+  <g stroke="#9F8BFF" stroke-width="10" fill="none" stroke-linecap="round">
+    <line x1="1170" y1="505" x2="1170" y2="545"/>
+    <path d="M 1150 528 L 1170 550 L 1190 528"/>
+  </g>
+
+  <!-- checkout card: discount applied -->
+  <g transform="translate(1030 580)">
+    <rect width="330" height="240" rx="24" fill="#FFFFFF"/>
+    <text x="28" y="56" font-family="DejaVu Sans" font-weight="bold" font-size="30" fill="#101828">Checkout</text>
+    <text x="28" y="110" font-family="DejaVu Sans" font-size="26" fill="#667085">Subtotal</text>
+    <text x="302" y="110" font-family="DejaVu Sans" font-size="26" fill="#667085" text-anchor="end">$40.00</text>
+    <text x="28" y="156" font-family="DejaVu Sans" font-size="26" fill="#0B8F6B">Discount</text>
+    <text x="302" y="156" font-family="DejaVu Sans" font-size="26" fill="#0B8F6B" text-anchor="end">−$8.00</text>
+    <line x1="28" y1="182" x2="302" y2="182" stroke="#EAECF0" stroke-width="3"/>
+    <text x="28" y="224" font-family="DejaVu Sans" font-weight="bold" font-size="30" fill="#101828">Total</text>
+    <text x="302" y="224" font-family="DejaVu Sans" font-weight="bold" font-size="30" fill="#101828" text-anchor="end">$32.00</text>
+  </g>
+</svg>

@@ -4,13 +4,17 @@
 > Nothing here may ship until the founder signs off on: final app name, pricing copy,
 > and the demo store URL.
 
-## 1. App name (30-char limit)
+## 1. App name (30-char limit) — OWNER DECISION PENDING
+
+The Partner app, dev-store install, and admin nav all currently say **"Discountify"**;
+this draft was written under the working name "PriceKeeper Discounts". Pick one and
+use it everywhere (listing, app config, privacy policy, support address).
 
 | Option | Chars | Rationale |
 |---|---|---|
-| **PriceKeeper Discounts** (working name) | 21 | Name IS the promise: it keeps your prices. Matches `pricekeeper-discounts` handle. |
-| PriceKeeper: Volume & BOGO | 26 | Keeps the brand, front-loads two high-volume search terms. |
-| PriceKeeper Discount Manager | 28 | Targets "discount manager" directly. |
+| **Discountify** (current Partner app name) | 11 | Short, memorable, matches what's deployed. Slight risk: reads close to competitor "Discounty". |
+| Discountify: Volume & BOGO | 26 | Keeps the deployed name, front-loads two high-volume search terms. |
+| **PriceKeeper Discounts** (docs' working name) | 21 | Name IS the promise: it keeps your prices. Matches repo handle. Requires renaming the Partner app. |
 
 ## 2. Tagline (max 70 chars) — 3 options
 
@@ -35,9 +39,16 @@
 - All discount types: percentage, fixed amount, new price, volume/quantity breaks,
   BOGO & free gift, cart total, free shipping
 - Collection targeting with zero tagging — membership resolves at checkout
-- Live preview before activation, runs the same engine checkout uses
+  _(⚠ keep only if collection targeting passes the Phase 1 checkout test)_
+- Analytics from Shopify's own order data — revenue, orders, discounts given
 - Storefront widgets: was/now strikethrough, tier table, BOGO badge, countdown,
   free-shipping bar
+
+> **Removed 2026-07-25:** the "Live preview before activation" bullet. The preview
+> engine exists server-side (`app/services/preview.server.ts`) but has no UI screen,
+> so the claim can't be shown in genuine screenshots. Restore the bullet only if a
+> preview UI ships. Same applies to the conflict checker (`scanConflicts` service,
+> no panel).
 
 ## 5. Pricing (for the listing's pricing section)
 

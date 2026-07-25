@@ -1,0 +1,49 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5B3DF5"/>
+      <stop offset="1" stop-color="#7C5CFF"/>
+    </linearGradient>
+    <linearGradient id="tagg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#EFEDFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" rx="264" fill="url(#bg)"/>
+  <!-- soft inner glow circle -->
+  <circle cx="600" cy="600" r="430" fill="#FFFFFF" opacity="0.06"/>
+  <!-- price tag, rotated -->
+  <g transform="rotate(-38 600 600)">
+    <path d="M 380 425
+             L 700 425
+             Q 730 425 751 446
+             L 936 631
+             Q 957 652 936 673
+             L 751 858
+             Q 730 879 709 858
+             L 380 858 ... z" fill="none"/>
+    <path d="M 700 380
+             L 405 380
+             Q 355 380 355 430
+             L 355 770
+             Q 355 820 405 820
+             L 700 820
+             Q 722 820 737 805
+             L 905 637
+             Q 926 616 926 600
+             Q 926 584 905 563
+             L 737 395
+             Q 722 380 700 380 Z" fill="url(#tagg)"/>
+    <!-- tag hole -->
+    <circle cx="790" cy="600" r="42" fill="#5B3DF5"/>
+    <!-- percent sign -->
+    <g stroke="#5B3DF5" stroke-width="46" fill="none" stroke-linecap="round">
+      <line x1="472" y1="712" x2="648" y2="488"/>
+    </g>
+    <circle cx="486" cy="502" r="52" fill="none" stroke="#5B3DF5" stroke-width="40"/>
+    <circle cx="634" cy="698" r="52" fill="none" stroke="#5B3DF5" stroke-width="40"/>
+  </g>
+  <!-- checkmark badge: bottom right -->
+  <circle cx="880" cy="880" r="150" fill="#17C77A" stroke="#FFFFFF" stroke-width="26"/>
+  <path d="M 810 882 L 862 934 L 952 826" fill="none" stroke="#FFFFFF" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
