@@ -127,10 +127,16 @@ export async function activateCampaign(
   campaign: { id: string; name: string; type: string; configJson: string; startsAt: Date | null; endsAt: Date | null; discountId: string | null },
   shopId: string,
   planTier: string,
+  options: { skipLimitCheck?: boolean } = {},
 ) {
-  const allowed = await canActivateCampaign(shopId, planTier);
-  if (!allowed) {
-    throw new Error("Active campaign limit reached for this plan. Upgrade or pause another campaign first.");
+  // skipLimitCheck: used when re-pushing config for an ALREADY-ACTIVE campaign
+  // (e.g. after an edit) — the campaign counts toward its own limit, so the
+  // check would wrongly reject shops running at their plan cap.
+  if (!options.skipLimitCheck) {
+    const allowed = await canActivateCampaign(shopId, planTier);
+    if (!allowed) {
+      throw new Error("Active campaign limit reached for this plan. Upgrade or pause another campaign first.");
+    }
   }
 
   const functionId = await getDiscountFunctionId(admin);

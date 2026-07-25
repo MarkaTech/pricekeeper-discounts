@@ -48,6 +48,24 @@ export async function createCampaign(shopId: string, data: {
   });
 }
 
+export async function updateCampaign(id: string, shopId: string, data: {
+  name: string;
+  type: string;
+  configJson: string;
+  startsAt?: Date | null;
+  endsAt?: Date | null;
+  recurrence?: string | null;
+}) {
+  return prisma.campaign.update({
+    where: { id, shopId },
+    data,
+  });
+}
+
+export async function deleteCampaign(id: string, shopId: string) {
+  return prisma.campaign.delete({ where: { id, shopId } });
+}
+
 export async function updateCampaignStatus(id: string, status: string, discountId?: string | null) {
   // Distinguish three cases:
   //  - discountId is a string  -> set it (just activated, got a fresh node)

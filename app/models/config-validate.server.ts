@@ -46,14 +46,29 @@ export function validateCampaignConfig(type: CampaignType, config: Record<string
       }
       break;
     }
-    case "BOGO":
-      if (!config.buyProductIds || !config.getProductIds) {
-        errors.push("BOGO campaigns need both a 'buy' and a 'get' product selection.");
-      }
-      if (typeof config.buyQuantity !== "number" || config.buyQuantity < 1) {
-        errors.push("Buy quantity must be at least 1.");
+    case "BOGO": {
+      // Mirrors the engine: BOGO reads config.bogo, and the buy/get pools are
+      // drawn from the campaign's targeting (see engine/lines.ts).
+      const bogo = config.bogo as { buyQuantity?: unknown; getQuantity?: unknown; getDiscountPercentage?: unknown } | undefined;
+      if (!bogo || typeof bogo !== "object") {
+        errors.push("BOGO campaigns need buy/get quantities.");
+      } else {
+        if (typeof bogo.buyQuantity !== "number" || bogo.buyQuantity < 1) {
+          errors.push("Buy quantity must be at least 1.");
+        }
+        if (typeof bogo.getQuantity !== "number" || bogo.getQuantity < 1) {
+          errors.push("Get quantity must be at least 1.");
+        }
+        if (
+          typeof bogo.getDiscountPercentage !== "number" ||
+          bogo.getDiscountPercentage <= 0 ||
+          bogo.getDiscountPercentage > 100
+        ) {
+          errors.push("The discount on 'get' items must be between 0 and 100%.");
+        }
       }
       break;
+    }
     case "CART_TOTAL":
       if (typeof config.percentage !== "number" && typeof config.amount !== "number") {
         errors.push("Cart-total campaigns need either a percentage or a fixed amount.");
@@ -68,6 +83,21 @@ export function validateCampaignConfig(type: CampaignType, config: Record<string
 
   if (config.minSubtotal !== undefined && typeof config.minSubtotal !== "string") {
     errors.push("minSubtotal must be a decimal string (money minor-unit safe), not a float.");
+  }
+
+  // The engine's parseConfig fail-closes (zero discounts) unless the config
+  // embeds its own type and a valid targeting scope — enforce that here so a
+  // campaign can never be saved in a shape checkout would silently ignore.
+  if (config.type !== type) {
+    errors.push("Config is missing its campaign type.");
+  }
+  const targeting = config.targeting as { scope?: string; productIds?: unknown[]; collectionIds?: unknown[] } | undefined;
+  if (!targeting || !["STORE", "COLLECTIONS", "PRODUCTS", "VARIANTS"].includes(targeting.scope ?? "")) {
+    errors.push("Choose what this campaign applies to (entire store, products, or collections).");
+  } else if (targeting.scope === "PRODUCTS" && (!Array.isArray(targeting.productIds) || targeting.productIds.length === 0)) {
+    errors.push("Select at least one product, or switch 'Applies to' to the entire store.");
+  } else if (targeting.scope === "COLLECTIONS" && (!Array.isArray(targeting.collectionIds) || targeting.collectionIds.length === 0)) {
+    errors.push("Select at least one collection, or switch 'Applies to' to the entire store.");
   }
 
   return { valid: errors.length === 0, errors };
