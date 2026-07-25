@@ -10,3 +10,10 @@ prisma/dev.sqlite
 .DS_Store
 .shopify/
 extensions/discount-function/node_modules/
+
+# Lockfiles are intentionally untracked for now: the app runs from the owner's
+# machine, and lockfiles generated in other environments (cloud sandboxes) pin
+# different package versions and cause pull conflicts. Before production deploy,
+# regenerate a lockfile on the deploy machine and remove these two lines.
+package-lock.json
+extensions/discount-function/package-lock.json
