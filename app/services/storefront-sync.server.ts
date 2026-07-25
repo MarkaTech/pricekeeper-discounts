@@ -9,6 +9,12 @@
 // used below. Resolve against the actual CLI error on first `shopify app dev`.
 
 import type { AdminApiContext } from "@shopify/shopify-app-remix/server";
+import prisma from "../db.server";
+import { getWidgetSettings } from "../models/widget-settings.server";
+
+const SHOP_ID_QUERY = `#graphql
+  query ShopId { shop { id } }
+`;
 
 const METAFIELDS_SET_MUTATION = `#graphql
   mutation MetafieldsSet($metafields: [MetafieldsSetInput!]!) {
@@ -60,4 +66,37 @@ export async function publishStorefrontMetafields(
     throw new Error(data.data.metafieldsSet.userErrors.map((e: any) => e.message).join("; "));
   }
   return data.data.metafieldsSet.metafields;
+}
+
+/**
+ * Convenience wrapper: gathers everything the theme extension needs (current
+ * active campaigns + widget settings) and publishes both metafields. Call
+ * after anything that changes what storefront widgets should show — widget
+ * settings saves, campaign activation/deactivation.
+ */
+export async function syncStorefront(admin: AdminApiContext, shopId: string) {
+  const response = await admin.graphql(SHOP_ID_QUERY);
+  const data = await response.json();
+  const shopGid = data.data.shop.id as string;
+
+  const campaigns = await prisma.campaign.findMany({ where: { shopId, status: "ACTIVE" } });
+  const summaries: ActiveCampaignSummary[] = campaigns.map((c: typeof campaigns[number]) => {
+    let targeting: Record<string, any> = {};
+    try {
+      targeting = JSON.parse(c.configJson)?.targeting ?? {};
+    } catch {
+      // Malformed config never blocks the sync; the widget just gets no targeting.
+    }
+    return {
+      id: c.id,
+      type: c.type,
+      collectionIds: targeting.collectionIds ?? [],
+      productIds: targeting.productIds ?? [],
+      startsAt: c.startsAt?.toISOString() ?? null,
+      endsAt: c.endsAt?.toISOString() ?? null,
+    };
+  });
+
+  const widgetSettings = await getWidgetSettings(shopId);
+  return publishStorefrontMetafields(admin, shopGid, summaries, widgetSettings as unknown as Record<string, unknown>);
 }

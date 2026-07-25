@@ -5,6 +5,7 @@ import { Page, Card, Badge, Banner, Button, BlockStack, Text } from "@shopify/po
 import { authenticate } from "../shopify.server";
 import { getOrCreateShop, getCampaign } from "../models/campaign.server";
 import { activateCampaign, deactivateCampaign } from "../services/discounts.server";
+import { syncStorefront } from "../services/storefront-sync.server";
 
 const STATUS_TONE: Record<string, "success" | "info" | "warning" | "critical"> = {
   ACTIVE: "success",
@@ -32,12 +33,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   try {
     if (intent === "activate") {
-      // Free/Growth/Pro plan tiers aren't wired to real billing yet — default
-      // to FREE's limit until the billing plan lookup is built (tracked
-      // separately). This still enforces a sane cap rather than none.
-      await activateCampaign(admin, campaign, shop.id, "FREE");
+      // shop.planTier is kept in sync with Shopify Billing by /app/billing
+      // and the app_subscriptions/update webhook.
+      await activateCampaign(admin, campaign, shop.id, shop.planTier);
     } else if (intent === "deactivate" && campaign.discountId) {
       await deactivateCampaign(admin, campaign.id, campaign.discountId);
+    }
+    // Refresh the storefront widget metafields to match the new active set.
+    // Never blocks the activation itself — widgets are display-only.
+    try {
+      await syncStorefront(admin, shop.id);
+    } catch (syncError) {
+      console.warn("Storefront metafield sync failed:", syncError);
     }
   } catch (error) {
     return json({ error: error instanceof Error ? error.message : String(error) });
