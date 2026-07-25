@@ -1,20 +1,13 @@
-# App Store listing — DRAFT — pending founder approval
+# App Store listing — DRAFT
 
 > Every claim below is backed by the codebase (see the claims register at the end).
-> Nothing here may ship until the founder signs off on: final app name, pricing copy,
-> and the demo store URL.
+> Remaining owner sign-offs: privacy policy (legal pass) and the demo store URL.
 
-## 1. App name (30-char limit) — OWNER DECISION PENDING
+## 1. App name — DECIDED 2026-07-25
 
-The Partner app, dev-store install, and admin nav all currently say **"Discountify"**;
-this draft was written under the working name "PriceKeeper Discounts". Pick one and
-use it everywhere (listing, app config, privacy policy, support address).
-
-| Option | Chars | Rationale |
-|---|---|---|
-| **Discountify** (current Partner app name) | 11 | Short, memorable, matches what's deployed. Slight risk: reads close to competitor "Discounty". |
-| Discountify: Volume & BOGO | 26 | Keeps the deployed name, front-loads two high-volume search terms. |
-| **PriceKeeper Discounts** (docs' working name) | 21 | Name IS the promise: it keeps your prices. Matches repo handle. Requires renaming the Partner app. |
+**Listing name: `Discountify: Volume & BOGO`** (26/30 chars — owner decision).
+The app's display name in the admin stays "Discountify". Use the full listing name
+in the App Store listing title; use "Discountify" in body copy after first mention.
 
 ## 2. Tagline (max 70 chars) — 3 options
 
@@ -25,12 +18,12 @@ use it everywhere (listing, app config, privacy policy, support address).
 ## 3. 100-word intro
 
 > Some discount apps edit your product prices to create sales — and a crash, rate
-> limit, or uninstall can leave your whole catalog wrong. PriceKeeper never touches
+> limit, or uninstall can leave your whole catalog wrong. Discountify never touches
 > your prices. Every campaign is a native Shopify automatic discount, applied at
 > checkout by Shopify Functions: volume discounts and quantity breaks, BOGO and free
-> gifts, bulk discounts, new prices, cart-total offers, and free shipping. Target
-> collections of any size with zero tagging, preview the exact checkout math before
-> going live, and show was/now prices, tier tables, and countdowns on your storefront.
+> gifts, bulk discounts, new prices, cart-total offers, and free shipping. Track
+> results with order-level analytics, and show was/now prices, tier tables, and
+> countdowns on your storefront.
 > Uninstall anytime — Shopify removes every discount automatically.
 
 ## 4. Feature bullets
@@ -58,11 +51,12 @@ All paid plans: 14-day free trial, annual billing = 2 months free.
 |---|---|---|
 | Free | $0 | 2 active campaigns, all discount types, unlimited variants, storefront widgets |
 | Growth | $14.90/mo or $149/yr | 15 active campaigns, all widgets + customization, analytics dashboard |
-| Pro | $39.90/mo or $399/yr | Unlimited campaigns (max 25 concurrently active — Shopify platform limit), customer segments & tags targeting, priority support, API access (coming soon) |
+| Pro | $39.90/mo or $399/yr | Unlimited campaigns (max 25 concurrently active — Shopify platform limit), customer segments & tags targeting, priority support |
 
-> **Founder flags:** (a) API access is not built — must say "(coming soon)" everywhere
-> or be dropped until it exists. (b) Feature gating other than the active-campaign
-> count is not enforced in code today.
+> **Decided 2026-07-25:** the "API access (coming soon)" line is dropped everywhere
+> (listing, pricing copy, in-app billing page) until an API exists.
+> **Open flag:** feature gating other than the active-campaign count is not enforced
+> in code today.
 
 ## 6. Listing content compliance checklist
 

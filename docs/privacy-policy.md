@@ -1,8 +1,8 @@
-# Privacy Policy — PriceKeeper Discounts
+# Privacy Policy — Discountify
 
 _Last updated: 2026-07-21_
 
-PriceKeeper Discounts ("the app", "we") is a Shopify app that creates native Shopify
+Discountify ("the app", "we") is a Shopify app that creates native Shopify
 automatic discounts. This policy describes exactly what data the app stores, what it
 reads without storing, and how data is deleted. It is written against the app's actual
 database schema (`prisma/schema.prisma`).

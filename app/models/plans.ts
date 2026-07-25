@@ -13,8 +13,8 @@ export interface PlanDefinition {
   features: string[];
 }
 
-// Pro's "API access" line item is intentionally marked "(coming soon)" — no
-// API is built yet. See docs/store-listing-draft.md founder flag (a).
+// Owner decision 2026-07-25: no "API access (coming soon)" line anywhere —
+// unbuilt features must not be advertised (known review-rejection reason).
 export const PLAN_DISPLAY: Record<PlanTier, PlanDefinition> = {
   FREE: {
     tier: "FREE",
@@ -42,7 +42,6 @@ export const PLAN_DISPLAY: Record<PlanTier, PlanDefinition> = {
       "Unlimited campaigns (max 25 concurrently active — a Shopify platform limit)",
       "Customer segments & tags targeting",
       "Priority support",
-      "API access (coming soon)",
     ],
   },
 };
