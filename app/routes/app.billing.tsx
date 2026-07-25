@@ -16,14 +16,13 @@ import {
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import { getOrCreateShop } from "../models/campaign.server";
+import { PLAN_DISPLAY, type PlanTier } from "../models/plans";
 import {
-  PLAN_DISPLAY,
   ALL_PAID_PLAN_KEYS,
   billingIsTest,
   planFromSubscriptionName,
   setShopPlan,
   type BillingPlanKey,
-  type PlanTier,
 } from "../services/billing.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
